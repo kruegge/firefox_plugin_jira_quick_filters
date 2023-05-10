@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "Jira Cloud Quickfilters",
-  "version": "0.1",
+  "version": "0.2",
 
   "description": "Show jira cloud quickfilters in both variants - less filters and much filters",
 
@@ -13,7 +13,7 @@
   "content_scripts": [
     {
       "matches": ["http://*/secure/RapidBoard.jspa?*", "https://*/secure/RapidBoard.jspa?*", "https://*/jira/software/*"],
-      "js": ["src/inject/inject.js", "js/jquery/jquery.min.js"]
+      "js": ["src/inject/inject.js"]
     }
   ]
 

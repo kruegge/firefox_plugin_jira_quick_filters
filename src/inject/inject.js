@@ -1,33 +1,45 @@
 chrome.runtime.sendMessage({}, function(response) {
-var refresher = setInterval(function() {
-
-	if (document.readyState == "complete") {
-	      var $ = jQuery;
-
-	      var quickfiltersButton = $('#ghx-quick-filters').find('button span:contains(Quick filters), button span:contains(Schnellfilter)');
-
-	      if (quickfiltersButton.length) { 
-		$(quickfiltersButton).click();
-	      } else {
-	      	// too much quickfilters - create new new and show below
-	      	var filterList = $('div#quickFilterList ul li[id^=filter-element-]');
-	      	
-	      	var list = $("<ul class='sc-16agb5g-0'>");
-	      	
-	      	filterList.each(function() {
-	      		var current = $(this);
-	      		
-	      		var li = $("<li class='sc-1gvv0kj-0'>").append($("<button type='button' class='css-1f7f0z2' style='padding-right:10px;'>").append($("<span class='css-178ag6o'>").text(current.text()))) 
-	      		li.click(function(){$('#quickFilterList li[id="'+current.attr('id')+'"] label').click();});
-	      		
-	      		list.append(li);
-	      	});
-	      	
-	      	
-	      	var quickFilters = $('#ghx-quick-filters').append(list);
-	      }
-	      
-	      clearInterval(refresher);
+  var refresher = setInterval(function() {
+    if (document.readyState == "complete") {
+      var quickfiltersButton = Array.from(document.querySelectorAll('#ghx-quick-filters button span'))
+        .find(span => span.innerText.includes('Quick filters') || span.innerText.includes('Schnellfilter'));
+      
+      if (quickfiltersButton) { 
+        quickfiltersButton.click();
+      } else {
+        var filterList = Array.from(document.querySelectorAll('div#quickFilterList ul li[id^=filter-element-]'));
+        
+        var list = document.createElement('ul');
+        list.classList.add('sc-16agb5g-0');
+        
+        filterList.forEach(function(current) {
+          var li = document.createElement('li');
+          li.classList.add('sc-1gvv0kj-0');
+          
+          var button = document.createElement('button');
+          button.type = 'button';
+          button.classList.add('css-1f7f0z2');
+          button.style.paddingRight = '10px';
+          
+          var span = document.createElement('span');
+          span.classList.add('css-178ag6o');
+          span.innerText = current.textContent;
+          
+          button.appendChild(span);
+          li.appendChild(button);
+          li.addEventListener('click', function(){
+            document.querySelector('#quickFilterList li[id="'+current.getAttribute('id')+'"] label').click();
+          });
+          
+          list.appendChild(li);
+        });
+        
+        var quickFilters = document.querySelector('#ghx-quick-filters');
+        quickFilters.appendChild(list);
       }
-    }, 1000);
+      
+      clearInterval(refresher);
+    }
+  }, 1000);
 });
+
